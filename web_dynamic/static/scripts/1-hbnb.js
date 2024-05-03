@@ -12,7 +12,7 @@ $(document).ready(function() {
             delete checkedAmenities[amenityId];
         }
         if (Object.keys(checkedAmenities).length === 0) {
-            $('.alist').html('&nbsp;');
+            $('.amenities h4').html('&nbsp;');
         } else {
             updateAmenitiesList();
 	}
