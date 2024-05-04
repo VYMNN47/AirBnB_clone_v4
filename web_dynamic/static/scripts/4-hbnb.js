@@ -43,9 +43,9 @@ $(document).ready(function() {
             url: 'http://0.0.0.0:5001/api/v1/places_search',
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({}),
+            data: (checkedAmenities != null ? JSON.stringify({"amenities": Object.keys(checkedAmenities)}) : JSON.stringify({})),
             success: function(response) {
-                // Handle the response here
+		$('section.places').empty();
 		for (let i = 0; i < response.length; i++) {
 		    const place = response[i];
 		    $('section.places').append('<article></article>');
@@ -65,13 +65,14 @@ $(document).ready(function() {
 		}
             },
             error: function(error) {
-                // Handle the error here
                 console.log(error);
             }
         });
     }
 
-
     Post_places();
 
+    $('#search').click(function() {
+        Post_places();
+    });
 });
