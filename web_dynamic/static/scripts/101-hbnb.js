@@ -106,6 +106,7 @@ $(document).ready(function() {
 		$('section.places').empty();
 		for (let i = 0; i < response.length; i++) {
 		    const place = response[i];
+		    console.log(place.reviews);
 		    $('section.places').append('<article></article>');
 		    $('section.places article').last()
 	                .append($('<div>', {class: 'title_box'})
@@ -119,7 +120,12 @@ $(document).ready(function() {
                         )
 			.append($('<div>', {class: 'user'})
 			)
-			.append($('<div>', {class: 'description'}).html(place.description));
+			.append($('<div>', {class: 'description'}).html(place.description))
+			.append($('<div>', {class: 'reviews', 'data-place': place.id})
+			    .append($('<h3>'))
+	 		    .append($('<ul>'))
+			);
+			get_reviews(place.id);
 		}
             },
             error: function(error) {
@@ -129,6 +135,16 @@ $(document).ready(function() {
     }
 
     Post_places();
+    function get_reviews(place_id) {
+        $.get(`http://0.0.0.0:5001/api/v1/places/${place_id}/reviews`, function(response) {
+	    $(`.reviews[data-place="${place_id}"] h3`).text(`${response.length} Review` + (response.length !== 1 ? 's' : ''));
+ 	    for (let x = 0; x < response.length; x++) {
+ 	        review = response[x];
+		$(`.reviews[data-place="${place_id}"] ul`).append($('<li>').append($('<p>').text(review.text)));
+	    }
+	    console.log(response);
+	});
+    }
 
     $('#search').click(function() {
         Post_places();
